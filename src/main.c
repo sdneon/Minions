@@ -2,8 +2,8 @@
  * Super But Old Mini on's is a hybrid watch face with a different super hero showing the time every hour.
  * Hero tells the time via hour in the bum, and points to minutes.
  *
- * TODO:
- * > Move date to either side so as to never overlap with the hand.
+ * Done:
+ * > Move date to either side so as to reduce overlap with hand.
  **/
 #include <pebble.h>
 
@@ -57,8 +57,15 @@ static GBitmap *m_spbmPics[MAX_HEROES] = {0};
 static GBitmap *m_spbmPicsHands[MAX_HANDS] = {0};
 static RotBitmapLayer *m_spbmLayer[2] = {NULL};
 
+#define DATERECT_X1 4
+#define DATERECT_X2 76
+#define DATERECT_Y 134
+#define DATERECT_W 64
+#define DATERECT_H 24
+
 static int m_nHeroId = 0;
 static bool m_bFirstTime = true;
+static bool m_bDateOnLeft = true;
 
 /************************************ UI **************************************/
 
@@ -115,6 +122,23 @@ static void tick_handler(struct tm *tick_time, TimeUnits changed) {
         }
     }
 
+    if (m_bDateOnLeft)
+    {
+        if (s_last_time.minutes >= 30)
+        {
+            layer_set_frame(text_layer_get_layer(s_day_date), GRect(DATERECT_X2, DATERECT_Y, DATERECT_W, DATERECT_H));
+            m_bDateOnLeft = false;
+        }
+    }
+    else
+    {
+        if (s_last_time.minutes < 30)
+        {
+            layer_set_frame(text_layer_get_layer(s_day_date), GRect(DATERECT_X1, DATERECT_Y, DATERECT_W, DATERECT_H));
+            m_bDateOnLeft = true;
+        }
+    }
+
     // Redraw
     if (s_canvas_layer)
     {
@@ -164,7 +188,7 @@ static void update_proc(Layer *layer, GContext *ctx) {
     graphics_context_set_antialiased(ctx, ANTIALIASING);
 
     int32_t angleM = TRIG_MAX_ANGLE * mode_time.minutes / 60;
-
+/*
     // Plot hands
     GPoint minute_hand = (GPoint) {
         .x = (int16_t)(sin_lookup(angleM) * (int32_t)MINUTE_RADIUS / TRIG_MAX_RATIO) + s_center.x,
@@ -179,6 +203,7 @@ static void update_proc(Layer *layer, GContext *ctx) {
 //    graphics_context_set_stroke_color(ctx, GColorBlack);
 //    graphics_context_set_stroke_width(ctx, minute_stroke);
 //    graphics_draw_line(ctx, s_center, minute_hand);
+*/
 
     rot_bitmap_layer_set_angle(m_spbmLayer[0], angleM);
 
@@ -196,8 +221,9 @@ static void update_proc(Layer *layer, GContext *ctx) {
     // date box
     graphics_context_set_stroke_color(ctx, GColorBlack);
     graphics_context_set_stroke_width(ctx, 1);
-    graphics_fill_rect(ctx, GRect(40, 135, 64, 24), 10, GCornersAll);
-    graphics_draw_round_rect(ctx, GRect(40, 135, 64, 24), 10);
+    GRect rect = GRect(m_bDateOnLeft? DATERECT_X1: DATERECT_X2, DATERECT_Y+1, DATERECT_W, DATERECT_H);
+    graphics_fill_rect(ctx, rect, 10, GCornersAll);
+    graphics_draw_round_rect(ctx, rect, 10);
     strftime(s_day_buffer, sizeof("ddd dd"), "%a %d", tick_time);
     text_layer_set_text(s_day_date, s_day_buffer);
 }
@@ -214,12 +240,12 @@ static void window_load(Window *window) {
 
     // Create time TextLayer
     //s_hour_digit = text_layer_create(GRect(41, 57, 62, 50));
-    s_hour_digit = text_layer_create(GRect(41+43, 57+30+42, 42, 50));
+    s_hour_digit = text_layer_create(GRect(41+36, 57+30+45, 52, 50));
     text_layer_set_background_color(s_hour_digit, GColorClear);
     text_layer_set_text_color(s_hour_digit, GColorBlack);
 
     // create day/date layer
-    s_day_date = text_layer_create(GRect(40, 134, 64, 24));
+    s_day_date = text_layer_create(GRect(DATERECT_X1, DATERECT_Y, DATERECT_W, DATERECT_H));
     text_layer_set_background_color(s_day_date, GColorClear);
     text_layer_set_text_color(s_day_date, GColorBlack);
 

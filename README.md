@@ -28,6 +28,5 @@ The [Developer Retreat 2014](http://developer.getpebble.com/community/events/dev
  
 ##TODO
 * Add alternate hands if memory permits.
-* Move date out of the way to empty quadrant.
 * Alternate backgrounds/colours for night, am/pm?
 * Add how-to guide/tutorial on processing the PNGs.
