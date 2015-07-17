@@ -8,11 +8,13 @@ Inspired by a mashup of a minion and batman & superman picture somewhere on the 
 Heroes:
 * Green Arrow.
 * Aquaman.
+* Avatar Aang.
 * Batman.
 * Captain America.
 * The Flash.
 * Hulk.
 * Spiderman.
+* Superman.
 * Thor.
 
 ## Dev Notes

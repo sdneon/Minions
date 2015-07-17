@@ -26,6 +26,11 @@
         }
         ,{
           "type": "png",
+          "name": "HERO_AVATAR",
+          "file": "images/avatar.png"
+        }
+        ,{
+          "type": "png",
           "name": "HERO_BATMAN",
           "file": "images/batman.png"
         }
@@ -48,6 +53,11 @@
           "type": "png",
           "name": "HERO_SPIDERMAN",
           "file": "images/spiderman.png"
+        }
+        ,{
+          "type": "png",
+          "name": "HERO_SUPERMAN",
+          "file": "images/superman.png"
         }
         ,{
           "type": "png",
