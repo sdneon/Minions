@@ -38,9 +38,10 @@ static char s_day_buffer[12];
 
 static GPath *s_min_path;
 
-#define MAX_HEROES 7
+#define MAX_HEROES 8
 static const int HERO_ID[MAX_HEROES] = {
     RESOURCE_ID_HERO_ARROW,
+    RESOURCE_ID_HERO_AQUAMAN,
     RESOURCE_ID_HERO_BATMAN,
     RESOURCE_ID_HERO_CAPTAMERICA,
     RESOURCE_ID_HERO_FLASH,

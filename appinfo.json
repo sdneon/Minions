@@ -21,6 +21,11 @@
         }
         ,{
           "type": "png",
+          "name": "HERO_AQUAMAN",
+          "file": "images/aquaman.png"
+        }
+        ,{
+          "type": "png",
           "name": "HERO_BATMAN",
           "file": "images/batman.png"
         }
