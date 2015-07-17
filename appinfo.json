@@ -1,0 +1,71 @@
+{
+    "capabilities": [""],
+    "appKeys": {},
+    "resources": {
+        "media": [
+        {
+            "type": "png",
+            "menuIcon": true,
+            "name": "IMAGE_MENU_ICON",
+            "file": "images/logo.png"
+        },
+        {
+          "type": "png",
+          "name": "EXAMPLE_IMAGE",
+          "file": "images/example-image.png"
+        }
+        ,{
+          "type": "png",
+          "name": "HERO_ARROW",
+          "file": "images/green-arrow.png"
+        }
+        ,{
+          "type": "png",
+          "name": "HERO_BATMAN",
+          "file": "images/batman.png"
+        }
+        ,{
+          "type": "png",
+          "name": "HERO_CAPTAMERICA",
+          "file": "images/capt-america.png"
+        }
+        ,{
+          "type": "png",
+          "name": "HERO_FLASH",
+          "file": "images/flash.png"
+        }
+        ,{
+          "type": "png",
+          "name": "HERO_HULK",
+          "file": "images/hulk.png"
+        }
+        ,{
+          "type": "png",
+          "name": "HERO_SPIDERMAN",
+          "file": "images/spiderman.png"
+        }
+        ,{
+          "type": "png",
+          "name": "HERO_THOR",
+          "file": "images/thor.png"
+        }
+        ,{
+          "type": "png",
+          "name": "HAND_ARROW",
+          "file": "images/arrow.png"
+        }
+    ]},
+    "shortName": "Super Minions",
+    "longName": "Super But Old Mini.on's",
+    "companyName": "Neon",
+    "versionCode": 1,
+    "versionLabel": "1.0",
+    "uuid": "fdfbf842-577e-4fa7-8a47-b9960cec99e0",
+    "watchapp": {
+        "watchface": true
+    },
+    "targetPlatforms": [
+        "basalt"
+    ],
+    "sdkVersion": "3"
+}
