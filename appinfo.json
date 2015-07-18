@@ -66,15 +66,55 @@
         }
         ,{
           "type": "png",
+          "name": "HAND_MINION",
+          "file": "images/minionhand.png"
+        }
+        ,{
+          "type": "png",
           "name": "HAND_ARROW",
           "file": "images/arrow.png"
+        }
+        ,{
+          "type": "png",
+          "name": "HAND_AQUAHAND",
+          "file": "images/aquahand.png"
+        }
+        ,{
+          "type": "png",
+          "name": "HAND_AIR",
+          "file": "images/air.png"
+        }
+        ,{
+          "type": "png",
+          "name": "HAND_BATSIGNAL",
+          "file": "images/batsignal.png"
+        }
+        ,{
+          "type": "png",
+          "name": "HAND_HANDS",
+          "file": "images/hands.png"
+        }
+        ,{
+          "type": "png",
+          "name": "HAND_GREEN",
+          "file": "images/greenhand.png"
+        }
+        ,{
+          "type": "png",
+          "name": "HAND_BEAM",
+          "file": "images/beam.png"
+        }
+        ,{
+          "type": "png",
+          "name": "HAND_BOLT",
+          "file": "images/bolt.png"
         }
     ]},
     "shortName": "Super Minions",
     "longName": "Super But Old Mini.on's",
     "companyName": "Neon",
     "versionCode": 1,
-    "versionLabel": "1.0",
+    "versionLabel": "1.1",
     "uuid": "fdfbf842-577e-4fa7-8a47-b9960cec99e0",
     "watchapp": {
         "watchface": true

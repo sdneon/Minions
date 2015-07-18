@@ -25,10 +25,13 @@ The hands were supposed to be unique to the heroes (e.g. red laser beams for Sup
 The [Developer Retreat 2014](http://developer.getpebble.com/community/events/developer-retreat-2014/) tech videos were very helpful in providing tips to optimize for Pebble.
 
 ## Changelog
-* v1.0 work-in-progress
+* v1.1 work-in-progress
+  * Added more hands.
+  * Optimizing for size: aggressively remove unneeded codes/displays. E.g. circle around date.
+* v1.0
   * Initial release.
  
 ##TODO
-* Add alternate hands if memory permits.
+* Add alternate hands if memory permits. Outstanding: Captain America and Spiderman.
 * Alternate backgrounds/colours for night, am/pm?
 * Add how-to guide/tutorial on processing the PNGs.
