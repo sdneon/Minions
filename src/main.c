@@ -172,20 +172,29 @@ static void update_proc(Layer *layer, GContext *ctx) {
     static char buffer[] = "12";
 
     // Write the current hours and minutes into the buffer
-    if (clock_is_24h_style()) {
+    if (clock_is_24h_style())
+    {
         // Use 24 hour format
         strftime(buffer, sizeof("00"), "%H", tick_time);
-    } else {
+    }
+    else
+    {
         int hours = tick_time->tm_hour;
-        if (hours > 12) hours -= 12;
+        if (hours > 12)
+        {
+            hours -= 12;
+        }
         // Use 12 hour format
-        if ((hours > 0) && (hours < 10)) {
+        if (hours >= 10)
+        {
+            strftime(buffer, sizeof("00"), "%I", tick_time);
+        }
+        else if (hours > 0)
+        {
             // remove the leading "0""
             snprintf(buffer, 2, "%d", hours);
         }
-        else if (hours >= 10) {
-            strftime(buffer, sizeof("00"), "%I", tick_time);
-        }
+        else snprintf(buffer, 2, "12");
     }
 
     // Display this time on the TextLayer
