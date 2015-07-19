@@ -30,31 +30,9 @@ static TextLayer *s_day_date;
 static char s_day_buffer[12];
 
 #define MAX_HEROES 10
-static const int HERO_ID[MAX_HEROES] = {
-    RESOURCE_ID_HERO_ARROW,
-    RESOURCE_ID_HERO_AQUAMAN,
-    RESOURCE_ID_HERO_AVATAR,
-    RESOURCE_ID_HERO_BATMAN,
-    RESOURCE_ID_HERO_CAPTAMERICA,
-    RESOURCE_ID_HERO_FLASH,
-    RESOURCE_ID_HERO_HULK,
-    RESOURCE_ID_HERO_SPIDERMAN,
-    RESOURCE_ID_HERO_SUPERMAN,
-    RESOURCE_ID_HERO_THOR
-};
+#define HERO_ID RESOURCE_ID_HERO_ARROW
 #define MAX_HANDS MAX_HEROES
-static const int HAND_ID[MAX_HANDS] = {
-    RESOURCE_ID_HAND_ARROW,
-    RESOURCE_ID_HAND_AQUAHAND,
-    RESOURCE_ID_HAND_AIR,
-    RESOURCE_ID_HAND_BATSIGNAL,
-    RESOURCE_ID_HAND_MINION,
-    RESOURCE_ID_HAND_HANDS,
-    RESOURCE_ID_HAND_GREEN,
-    RESOURCE_ID_HAND_MINION,
-    RESOURCE_ID_HAND_BEAM,
-    RESOURCE_ID_HAND_BOLT
-};
+#define HAND_ID RESOURCE_ID_HAND_ARROW
 
 static GBitmap *m_spbmPics = NULL;
 static GBitmap *m_spbmPicsHands = NULL;
@@ -113,7 +91,7 @@ static void tick_handler(struct tm *tick_time, TimeUnits changed) {
             }
             m_nHeroId = nNewHeroId;
             //load only current needed pic:
-            m_spbmPics = gbitmap_create_with_resource(HERO_ID[nNewHeroId]);
+            m_spbmPics = gbitmap_create_with_resource(HERO_ID + nNewHeroId);
 //APP_LOG(APP_LOG_LEVEL_DEBUG, "N free: %d", heap_bytes_free());
             if (m_spbmPics != NULL)
             {
@@ -130,7 +108,7 @@ static void tick_handler(struct tm *tick_time, TimeUnits changed) {
             }
             m_nHandId = nNewHeroId;
             //load only current needed pic:
-            m_spbmPicsHands = gbitmap_create_with_resource(HAND_ID[m_nHandId]);
+            m_spbmPicsHands = gbitmap_create_with_resource(HAND_ID + m_nHandId);
             if (m_spbmPicsHands != NULL)
             {
                 bitmap_layer_set_bitmap((BitmapLayer *)m_spbmLayer[0], m_spbmPicsHands);
@@ -283,9 +261,9 @@ static void window_load(Window *window)
 
     //Picture layers
     s_canvas_layer2 = layer_create(GRect(-36, -42, 288, 336));
-    m_spbmPics = gbitmap_create_with_resource(HERO_ID[m_nHeroId]);
+    m_spbmPics = gbitmap_create_with_resource(HERO_ID + m_nHeroId);
     //m_nHandId = m_nHeroId;
-    m_spbmPicsHands = gbitmap_create_with_resource(HAND_ID[m_nHandId]);
+    m_spbmPicsHands = gbitmap_create_with_resource(HAND_ID + m_nHandId);
 
     for (int i = 0; i < 2; ++i)
     {

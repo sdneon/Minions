@@ -66,11 +66,6 @@
         }
         ,{
           "type": "png",
-          "name": "HAND_MINION",
-          "file": "images/minionhand.png"
-        }
-        ,{
-          "type": "png",
           "name": "HAND_ARROW",
           "file": "images/arrow.png"
         }
@@ -91,6 +86,11 @@
         }
         ,{
           "type": "png",
+          "name": "HAND_MINION",
+          "file": "images/minionhand.png"
+        }
+        ,{
+          "type": "png",
           "name": "HAND_HANDS",
           "file": "images/hands.png"
         }
@@ -98,6 +98,11 @@
           "type": "png",
           "name": "HAND_GREEN",
           "file": "images/greenhand.png"
+        }
+        ,{
+          "type": "png",
+          "name": "HAND_MINION2",
+          "file": "images/minionhand.png"
         }
         ,{
           "type": "png",
