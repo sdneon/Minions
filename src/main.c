@@ -93,7 +93,6 @@ static void tick_handler(struct tm *tick_time, TimeUnits changed) {
             {
                 //free up memory:
                 gbitmap_destroy(m_spbmPics);
-                m_spbmPics = NULL;
 //APP_LOG(APP_LOG_LEVEL_DEBUG, "X free: %d", heap_bytes_free());
             }
             m_nHeroId = nNewHeroId;
@@ -103,15 +102,13 @@ static void tick_handler(struct tm *tick_time, TimeUnits changed) {
             if (m_spbmPics != NULL)
             {
                 bitmap_layer_set_bitmap((BitmapLayer *)m_spbmLayer[1], m_spbmPics);
-                //layer_mark_dirty(s_canvas_layer2);
             }
 
             //Check if need to change hand
-            if ((m_nHandId >= 0) && (m_spbmPicsHands != NULL))
+            if (m_spbmPicsHands != NULL)
             {
                 //free up memory:
                 gbitmap_destroy(m_spbmPicsHands);
-                m_spbmPicsHands = NULL;
             }
             m_nHandId = nNewHeroId;
             //load only current needed pic:
@@ -133,7 +130,6 @@ static void tick_handler(struct tm *tick_time, TimeUnits changed) {
         m_nBgId = nNewBgId;
         //free up memory:
         gbitmap_destroy(m_spbmBg);
-        m_spbmBg = NULL;
         m_spbmBg = gbitmap_create_with_resource(BG_ID + m_nBgId);
         if (m_spbmBg != NULL)
         {
@@ -141,11 +137,14 @@ static void tick_handler(struct tm *tick_time, TimeUnits changed) {
         }
     }
 
+    GRect RECT_LEFT = GRect(DATERECT_X2, DATERECT_Y, DATERECT_W, DATERECT_H),
+        RECT_RIGHT = GRect(DATERECT_X1, DATERECT_Y, DATERECT_W, DATERECT_H);
+
     if (m_bDateOnLeft)
     {
         if (tick_time->tm_min >= 30)
         {
-            layer_set_frame(text_layer_get_layer(s_day_date), GRect(DATERECT_X2, DATERECT_Y, DATERECT_W, DATERECT_H));
+            layer_set_frame(text_layer_get_layer(s_day_date), RECT_LEFT);
             m_bDateOnLeft = false;
         }
     }
@@ -153,16 +152,13 @@ static void tick_handler(struct tm *tick_time, TimeUnits changed) {
     {
         if (tick_time->tm_min < 30)
         {
-            layer_set_frame(text_layer_get_layer(s_day_date), GRect(DATERECT_X1, DATERECT_Y, DATERECT_W, DATERECT_H));
+            layer_set_frame(text_layer_get_layer(s_day_date), RECT_RIGHT);
             m_bDateOnLeft = true;
         }
     }
 
     // Redraw
-    if (s_canvas_layer)
-    {
-        layer_mark_dirty(s_canvas_layer);
-    }
+    layer_mark_dirty(s_canvas_layer);
 }
 
 static void update_proc(Layer *layer, GContext *ctx) {
@@ -195,9 +191,16 @@ static void update_proc(Layer *layer, GContext *ctx) {
         else if (hours > 0)
         {
             // remove the leading "0""
-            snprintf(buffer, 2, "%d", hours);
+            buffer[0] = '0' + hours;
+            buffer[1] = 0;
         }
-        else snprintf(buffer, 2, "12");
+        //else snprintf(buffer, 2, "12");
+        else
+        {
+            buffer[0] = '1';
+            buffer[1] = '2';
+            buffer[2] = 0;
+        }
     }
 
     // Display this time on the TextLayer
@@ -288,7 +291,7 @@ static void window_load(Window *window)
     m_spbmBg = gbitmap_create_with_resource(BG_ID + m_nBgId);
     m_spbmLayerBg = bitmap_layer_create(GRect(36, 42, 144, 168));
     bitmap_layer_set_bitmap(m_spbmLayerBg, m_spbmBg);
-    bitmap_layer_set_background_color(m_spbmLayerBg, GColorClear);
+    //bitmap_layer_set_background_color(m_spbmLayerBg, GColorClear);
     bitmap_layer_set_compositing_mode(m_spbmLayerBg, GCompOpSet);
     layer_add_child(s_canvas_layer2, bitmap_layer_get_layer(m_spbmLayerBg));
 
@@ -314,6 +317,7 @@ static void window_load(Window *window)
 
 static void window_unload(Window *window)
 {
+    /*
     text_layer_destroy(s_hour_digit);
     text_layer_destroy(s_day_date);
     layer_destroy(s_canvas_layer);
@@ -328,14 +332,13 @@ static void window_unload(Window *window)
     }
     rot_bitmap_layer_destroy(m_spbmLayer[0]);
     rot_bitmap_layer_destroy(m_spbmLayer[1]);
+*/
 }
 
 /*********************************** App **************************************/
 
 static void init()
 {
-//    srand(time(NULL));
-
     s_main_window = window_create();
     window_set_window_handlers(s_main_window, (WindowHandlers) {
         .load = window_load,
