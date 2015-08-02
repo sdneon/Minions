@@ -114,12 +114,22 @@
           "name": "HAND_BOLT",
           "file": "images/bolt.png"
         }
+        ,{
+          "type": "png",
+          "name": "BG01",
+          "file": "images/bg1.png"
+        }
+        ,{
+          "type": "png",
+          "name": "BG02",
+          "file": "images/bg2.png"
+        }
     ]},
     "shortName": "Super Minions",
     "longName": "Super But Old Mini.on's",
     "companyName": "Neon",
     "versionCode": 1,
-    "versionLabel": "1.1",
+    "versionLabel": "1.2",
     "uuid": "fdfbf842-577e-4fa7-8a47-b9960cec99e0",
     "watchapp": {
         "watchface": true

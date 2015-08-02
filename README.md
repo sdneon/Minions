@@ -25,7 +25,9 @@ The hands were supposed to be unique to the heroes (e.g. red laser beams for Sup
 The [Developer Retreat 2014](http://developer.getpebble.com/community/events/developer-retreat-2014/) tech videos were very helpful in providing tips to optimize for Pebble.
 
 ## Changelog
-* v1.1 work-in-progress
+* v1.2 work-in-progress
+  * Added backgrounds for day & night.
+* v1.1
   * Added more hands.
   * Optimizing for size: aggressively remove unneeded codes/displays. E.g. circle around date.
 * v1.0

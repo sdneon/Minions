@@ -33,9 +33,15 @@ static char s_day_buffer[12];
 #define HERO_ID RESOURCE_ID_HERO_ARROW
 #define MAX_HANDS MAX_HEROES
 #define HAND_ID RESOURCE_ID_HAND_ARROW
+#define BG_ID RESOURCE_ID_BG01
+//hours to transit/change background (we've 2 at the moment)
+#define HOUR_NIGHT 19
+#define HOUR_DAY 8
 
 static GBitmap *m_spbmPics = NULL;
 static GBitmap *m_spbmPicsHands = NULL;
+static GBitmap *m_spbmBg = NULL;
+static BitmapLayer *m_spbmLayerBg = NULL;
 static RotBitmapLayer *m_spbmLayer[2] = {NULL};
 
 #define DATERECT_X1 4
@@ -44,6 +50,7 @@ static RotBitmapLayer *m_spbmLayer[2] = {NULL};
 #define DATERECT_W 64
 #define DATERECT_H 24
 
+static int m_nBgId = 0;
 static int m_nHeroId = 0;
 static int m_nHandId = 0;
 static bool m_bFirstTime = true;
@@ -113,6 +120,24 @@ static void tick_handler(struct tm *tick_time, TimeUnits changed) {
             {
                 bitmap_layer_set_bitmap((BitmapLayer *)m_spbmLayer[0], m_spbmPicsHands);
             }
+        }
+    }
+    int nNewBgId = 0;
+    if ((tick_time->tm_hour >= HOUR_NIGHT)
+        || (tick_time->tm_hour < HOUR_DAY))
+    {
+        nNewBgId = 1;
+    }
+    if (nNewBgId != m_nBgId)
+    {
+        m_nBgId = nNewBgId;
+        //free up memory:
+        gbitmap_destroy(m_spbmBg);
+        m_spbmBg = NULL;
+        m_spbmBg = gbitmap_create_with_resource(BG_ID + m_nBgId);
+        if (m_spbmBg != NULL)
+        {
+            bitmap_layer_set_bitmap(m_spbmLayerBg, m_spbmBg);
         }
     }
 
@@ -239,7 +264,6 @@ static void window_load(Window *window)
 
     s_canvas_layer = layer_create(window_bounds);
     layer_set_update_proc(s_canvas_layer, update_proc);
-    layer_add_child(window_layer, s_canvas_layer);
 
     // Create time TextLayer
     //s_hour_digit = text_layer_create(GRect(41, 57, 62, 50));
@@ -261,6 +285,13 @@ static void window_load(Window *window)
 
     //Picture layers
     s_canvas_layer2 = layer_create(GRect(-36, -42, 288, 336));
+    m_spbmBg = gbitmap_create_with_resource(BG_ID + m_nBgId);
+    m_spbmLayerBg = bitmap_layer_create(GRect(36, 42, 144, 168));
+    bitmap_layer_set_bitmap(m_spbmLayerBg, m_spbmBg);
+    bitmap_layer_set_background_color(m_spbmLayerBg, GColorClear);
+    bitmap_layer_set_compositing_mode(m_spbmLayerBg, GCompOpSet);
+    layer_add_child(s_canvas_layer2, bitmap_layer_get_layer(m_spbmLayerBg));
+
     m_spbmPics = gbitmap_create_with_resource(HERO_ID + m_nHeroId);
     //m_nHandId = m_nHeroId;
     m_spbmPicsHands = gbitmap_create_with_resource(HAND_ID + m_nHandId);
@@ -278,6 +309,7 @@ static void window_load(Window *window)
     // Add it as a child layer to the Window's root layer
     layer_add_child(s_canvas_layer2, text_layer_get_layer(s_hour_digit));
     layer_add_child(s_canvas_layer, text_layer_get_layer(s_day_date));
+    layer_add_child(window_layer, s_canvas_layer);
 }
 
 static void window_unload(Window *window)
