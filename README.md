@@ -27,6 +27,7 @@ The [Developer Retreat 2014](http://developer.getpebble.com/community/events/dev
 ## Changelog
 * v1.2 work-in-progress
   * Added backgrounds for day & night.
+    * Owing to memory limits, hero pic may fail to load sometimes. Thus, added a retry to load the hero again half a sec later.
 * v1.1
   * Added more hands.
   * Optimizing for size: aggressively remove unneeded codes/displays. E.g. circle around date.
@@ -35,5 +36,5 @@ The [Developer Retreat 2014](http://developer.getpebble.com/community/events/dev
  
 ##TODO
 * Add alternate hands if memory permits. Outstanding: Captain America and Spiderman.
-* Alternate backgrounds/colours for night, am/pm?
+* Add more backgrounds for day to night transitions.
 * Add how-to guide/tutorial on processing the PNGs.

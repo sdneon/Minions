@@ -11,8 +11,11 @@
 //Specify this flag to update every sec instead of min:
 //#define DEBUG_MODE 1
 
-//Specify this flag (in mins) to debug/try changing heroes
-//#define TRY_HERO_CHANGE_INTERVAL 2
+//Specify this flag (in mins or *2secs if DEBUG_MODE is on) to debug/try changing heroes
+//#define TRY_HERO_CHANGE_INTERVAL 5
+
+//Specify the delay interval (in ms) before trying to load hero image again
+#define INTERVAL_RETRY 500
 
 #define ANTIALIASING true
 #define MINUTE_RADIUS 132
@@ -55,8 +58,45 @@ static int m_nHeroId = 0;
 static int m_nHandId = 0;
 static bool m_bFirstTime = true;
 static bool m_bDateOnLeft = true;
+static AppTimer *m_sptimer1;
 
 /************************************ UI **************************************/
+void loadHero(void *a_Retry)
+{
+#ifdef DEBUG_MODE
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "%s hero: %d, free: %d", (a_Retry==NULL)? "Load":"Retry", m_nHeroId, heap_bytes_free());
+#endif
+    if (m_spbmPics != NULL)
+    {
+        if (!a_Retry)
+        {
+            gbitmap_destroy(m_spbmPics); //free memory
+        }
+        else
+        {
+            return;
+        }
+    }
+    //load only current needed pic:
+    m_spbmPics = gbitmap_create_with_resource(HERO_ID + m_nHeroId);
+    if (m_spbmPics != NULL)
+    {
+#ifdef DEBUG_MODE
+        APP_LOG(APP_LOG_LEVEL_DEBUG, "Load OK: %d", heap_bytes_free());
+#endif
+        bitmap_layer_set_bitmap((BitmapLayer *)m_spbmLayer[1], m_spbmPics);
+    }
+    else if (!a_Retry)
+    {
+#ifdef DEBUG_MODE
+        APP_LOG(APP_LOG_LEVEL_DEBUG, "Load failed: %d", heap_bytes_free());
+#endif
+        m_sptimer1 = app_timer_register(INTERVAL_RETRY, (AppTimerCallback) loadHero, (void*)1);
+    }
+#ifdef DEBUG_MODE
+    else APP_LOG(APP_LOG_LEVEL_DEBUG, "RETRY failed: %d", heap_bytes_free());
+#endif
+}
 
 static void tick_handler(struct tm *tick_time, TimeUnits changed) {
     // Store time
@@ -83,32 +123,17 @@ static void tick_handler(struct tm *tick_time, TimeUnits changed) {
 #else
         int nNewHeroId = m_nHeroId + 1;
         if (nNewHeroId >= MAX_HEROES) nNewHeroId = 0;
-//APP_LOG(APP_LOG_LEVEL_DEBUG, "hero= %d", nNewHeroId);
 #endif //TRY_HERO_CHANGE_INTERVAL
         m_bFirstTime = false;
         if (nNewHeroId != m_nHeroId)
         {
-//APP_LOG(APP_LOG_LEVEL_DEBUG, "free: %d", heap_bytes_free());
-            if (m_spbmPics != NULL)
-            {
-                //free up memory:
-                gbitmap_destroy(m_spbmPics);
-//APP_LOG(APP_LOG_LEVEL_DEBUG, "X free: %d", heap_bytes_free());
-            }
             m_nHeroId = nNewHeroId;
-            //load only current needed pic:
-            m_spbmPics = gbitmap_create_with_resource(HERO_ID + nNewHeroId);
-//APP_LOG(APP_LOG_LEVEL_DEBUG, "N free: %d", heap_bytes_free());
-            if (m_spbmPics != NULL)
-            {
-                bitmap_layer_set_bitmap((BitmapLayer *)m_spbmLayer[1], m_spbmPics);
-            }
+            loadHero(NULL);
 
             //Check if need to change hand
             if (m_spbmPicsHands != NULL)
             {
-                //free up memory:
-                gbitmap_destroy(m_spbmPicsHands);
+                gbitmap_destroy(m_spbmPicsHands); //free up memory
             }
             m_nHandId = nNewHeroId;
             //load only current needed pic:
@@ -317,11 +342,15 @@ static void window_load(Window *window)
 
 static void window_unload(Window *window)
 {
-    /*
     text_layer_destroy(s_hour_digit);
     text_layer_destroy(s_day_date);
     layer_destroy(s_canvas_layer);
     layer_destroy(s_canvas_layer2);
+    bitmap_layer_destroy(m_spbmLayerBg);
+    if (m_spbmBg)
+    {
+        gbitmap_destroy(m_spbmBg);
+    }
     if (m_spbmPics)
     {
         gbitmap_destroy(m_spbmPics);
@@ -332,7 +361,6 @@ static void window_unload(Window *window)
     }
     rot_bitmap_layer_destroy(m_spbmLayer[0]);
     rot_bitmap_layer_destroy(m_spbmLayer[1]);
-*/
 }
 
 /*********************************** App **************************************/
